@@ -389,6 +389,170 @@ footer {
 }
 footer span { font-weight: 500; color: var(--k-rose); }
 
+/* ── Progress Bar ── */
+.progress-track {
+  height: 8px;
+  background: var(--k-border);
+  border-radius: var(--radius-4xl);
+  overflow: hidden;
+  margin-top: 6px;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-4xl);
+  transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+.progress-fill.rose  { background: linear-gradient(90deg, var(--k-rose), var(--k-blush)); }
+.progress-fill.gold  { background: linear-gradient(90deg, var(--k-gold), #DFC49A); }
+.progress-fill.green { background: linear-gradient(90deg, #059669, #34D399); }
+
+/* ── Timeline ── */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+
+.tl-item {
+  display: grid;
+  grid-template-columns: 48px 2px 1fr;
+  gap: 0 16px;
+  position: relative;
+}
+.tl-week {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--k-muted);
+  text-align: right;
+  padding-top: 18px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.tl-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.tl-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--k-surface);
+  flex-shrink: 0;
+  margin-top: 20px;
+  z-index: 1;
+}
+.tl-dot.rose  { background: var(--k-rose); box-shadow: 0 0 0 3px var(--k-rose-pale); }
+.tl-dot.gold  { background: var(--k-gold); box-shadow: 0 0 0 3px var(--k-gold-pale); }
+.tl-dot.green { background: #059669;       box-shadow: 0 0 0 3px #D1FAE5; }
+.tl-line {
+  flex: 1;
+  width: 2px;
+  background: var(--k-border);
+  min-height: 24px;
+}
+.tl-item:last-child .tl-line { background: transparent; }
+
+.tl-card {
+  background: var(--k-surface);
+  border: 1px solid var(--k-border);
+  border-radius: var(--radius-xl);
+  padding: 16px 18px 18px;
+  margin-bottom: 16px;
+  transition: box-shadow .2s, transform .2s;
+}
+.tl-card:hover {
+  box-shadow: 0 6px 20px rgba(44,28,24,0.07);
+  transform: translateY(-2px);
+}
+.tl-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tl-card-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--k-text);
+  letter-spacing: -0.2px;
+}
+.tl-card-weeks {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--k-muted);
+  background: var(--k-ivory);
+  border: 1px solid var(--k-border);
+  padding: 2px 10px;
+  border-radius: var(--radius-4xl);
+}
+
+.tl-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+.tl-metric-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--k-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tl-metric-label span { font-size: 13px; font-weight: 700; letter-spacing: 0; text-transform: none; }
+
+.tl-tasks { margin-top: 12px; }
+.tl-task {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--k-border);
+  font-size: 12.5px;
+  color: var(--k-muted);
+}
+.tl-task:last-child { border-bottom: none; }
+.tl-task-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Summary Row ── */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.summary-card {
+  background: var(--k-surface);
+  border: 1px solid var(--k-border);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  text-align: center;
+}
+.summary-num {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.summary-num.rose  { color: var(--k-rose); }
+.summary-num.gold  { color: var(--k-gold); }
+.summary-num.green { color: #059669; }
+.summary-desc {
+  font-size: 11.5px;
+  color: var(--k-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -416,6 +580,9 @@ footer span { font-weight: 500; color: var(--k-rose); }
     </button>
     <button class="nav-item" onclick="switchTab('diff', this)">
       <span class="nav-icon">🔄</span> v1 → v2 差異
+    </button>
+    <button class="nav-item" onclick="switchTab('schedule', this)">
+      <span class="nav-icon">📅</span> 開發進度 &amp; 支付
     </button>
   </nav>
 
@@ -1157,6 +1324,173 @@ footer span { font-weight: 500; color: var(--k-rose); }
         </div>
       </div>
     </div>
+
+    <!-- ═══ 開發進度 & 支付 ═══ -->
+    <div id="panel-schedule" class="panel">
+      <div class="section-label">開發進度 &amp; 支付時程</div>
+
+      <!-- Summary -->
+      <div class="summary-row">
+        <div class="summary-card">
+          <div class="summary-num rose">5 週</div>
+          <div class="summary-desc">總開發時程</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num green">100%</div>
+          <div class="summary-desc">最終完成目標</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num gold">100%</div>
+          <div class="summary-desc">總費用（3 期付清）</div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline">
+
+        <!-- Week 1 -->
+        <div class="tl-item">
+          <div class="tl-week">W1</div>
+          <div class="tl-spine">
+            <div class="tl-dot rose"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-header">
+              <span class="tl-card-title">系統與模板確認</span>
+              <span class="tl-card-weeks">第 1 週</span>
+            </div>
+            <div class="tl-tasks">
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-rose)"></span>技術選型確認（前後端框架）</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-rose)"></span>UI 模板確認 &amp; Design Token 建立</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-rose)"></span>資料庫 Schema 初稿</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-rose)"></span>開發環境建置 &amp; CI/CD 設定</div>
+            </div>
+            <div class="tl-metrics">
+              <div>
+                <div class="tl-metric-label">完成進度 <span class="rose" style="color:var(--k-rose)">20%</span></div>
+                <div class="progress-track"><div class="progress-fill rose" style="width:20%"></div></div>
+              </div>
+              <div>
+                <div class="tl-metric-label">支付費用 <span style="color:var(--k-gold)">30%</span></div>
+                <div class="progress-track"><div class="progress-fill gold" style="width:30%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 2-3 -->
+        <div class="tl-item">
+          <div class="tl-week">W2–3</div>
+          <div class="tl-spine">
+            <div class="tl-dot gold"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-header">
+              <span class="tl-card-title">系統架設與設計</span>
+              <span class="tl-card-weeks">第 2 ～ 3 週</span>
+            </div>
+            <div class="tl-tasks">
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>前台核心頁面開發（首頁 / 聊天 / 配對）</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>後台管理系統架設</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>API 串接（ECPay / Web3 / OTP）</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>VIP 會員機制 &amp; 道具系統</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>私密相簿 / 閃電罐頭 / 禮物模組</div>
+            </div>
+            <div class="tl-metrics">
+              <div>
+                <div class="tl-metric-label">完成進度 <span style="color:var(--k-gold)">70%</span></div>
+                <div class="progress-track"><div class="progress-fill gold" style="width:70%"></div></div>
+              </div>
+              <div>
+                <div class="tl-metric-label">支付費用 <span style="color:var(--k-gold)">40%</span></div>
+                <div class="progress-track"><div class="progress-fill gold" style="width:40%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 4-5 -->
+        <div class="tl-item">
+          <div class="tl-week">W4–5</div>
+          <div class="tl-spine">
+            <div class="tl-dot green"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-header">
+              <span class="tl-card-title">測試與上線準備</span>
+              <span class="tl-card-weeks">第 4 ～ 5 週</span>
+            </div>
+            <div class="tl-tasks">
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>全功能整合測試（前台 + 後台）</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>跨裝置 / 跨瀏覽器 UI 驗收</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>效能調校 &amp; 安全性審查</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>正式環境部署 &amp; DNS 設定</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>上線後 Bug Fix 緩衝期</div>
+            </div>
+            <div class="tl-metrics">
+              <div>
+                <div class="tl-metric-label">完成進度 <span style="color:#059669">90–100%</span></div>
+                <div class="progress-track"><div class="progress-fill green" style="width:100%"></div></div>
+              </div>
+              <div>
+                <div class="tl-metric-label">支付費用 <span style="color:#059669">30%</span></div>
+                <div class="progress-track"><div class="progress-fill green" style="width:30%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /timeline -->
+
+      <!-- 費用總覽 -->
+      <div class="card card-full" style="max-width:640px; margin-top:8px;">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-icon">💰</span>
+          <span class="card-title">費用支付總覽</span>
+          <span class="card-chevron">▾</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="diff-table">
+            <thead>
+              <tr>
+                <th>期數</th>
+                <th>時程</th>
+                <th>里程碑</th>
+                <th style="text-align:right">費用比例</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-rose" style="height:auto;padding:2px 10px">第 1 期</span></td>
+                <td>第 1 週</td>
+                <td>系統與模板確認完成（20%）</td>
+                <td style="text-align:right;font-weight:700;color:var(--k-rose)">30%</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-gold" style="height:auto;padding:2px 10px">第 2 期</span></td>
+                <td>第 2–3 週</td>
+                <td>系統架設與設計完成（70%）</td>
+                <td style="text-align:right;font-weight:700;color:var(--k-gold)">40%</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="height:auto;padding:2px 10px;background:#D1FAE5;color:#059669">第 3 期</span></td>
+                <td>第 4–5 週</td>
+                <td>測試驗收 &amp; 正式上線（100%）</td>
+                <td style="text-align:right;font-weight:700;color:#059669">30%</td>
+              </tr>
+              <tr style="background:var(--k-ivory)">
+                <td colspan="3" style="font-weight:700;color:var(--k-text)">合計</td>
+                <td style="text-align:right;font-weight:700;color:var(--k-text)">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /panel-schedule -->
 
   </div><!-- /content -->
 
