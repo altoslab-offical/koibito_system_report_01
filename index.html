@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koibito 架構圖 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+/* ── Koibito Design Tokens ── */
+:root {
+  --k-rose:        #D64F60;
+  --k-rose-hover:  #C04358;
+  --k-rose-pale:   #F8E4E7;
+  --k-blush:       #E8B4B8;
+  --k-gold:        #C49A6C;
+  --k-gold-pale:   #F5ECD9;
+  --k-ivory:       #FBF6F2;
+  --k-surface:     #FFFFFF;
+  --k-ink:         #1C1412;
+  --k-ink-soft:    #2A1E1B;
+  --k-text:        #2A1C18;
+  --k-muted:       #9B8078;
+  --k-border:      #EDE5DF;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  --radius-sm:  6px;
+  --radius-md:  8px;
+  --radius-lg:  10px;
+  --radius-xl:  14px;
+  --radius-2xl: 18px;
+  --radius-3xl: 22px;
+  --radius-4xl: 26px;
+
+  --sidebar-w: 240px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--k-ivory);
+  color: var(--k-text);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ─────────────────────────────────────────
+   Sidebar
+───────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--k-ink);
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 0 24px;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.sidebar-brand-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.3px;
+}
+.sidebar-brand-sub {
+  font-size: 11px;
+  color: var(--k-muted);
+  margin-top: 3px;
+  font-weight: 300;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  transition: background .15s, color .15s;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.85);
+}
+.nav-item.active {
+  background: rgba(214, 79, 96, 0.15);
+  color: var(--k-rose);
+}
+.nav-icon { font-size: 16px; width: 18px; text-align: center; }
+
+.sidebar-footer {
+  padding: 16px 24px 0;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+.sidebar-version {
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  font-weight: 300;
+}
+
+/* ─────────────────────────────────────────
+   Main Content
+───────────────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Page Header ── */
+.page-header {
+  padding: 40px 40px 32px;
+  border-bottom: 1px solid var(--k-border);
+  background: var(--k-surface);
+}
+.page-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.page-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--k-text);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.page-title span { color: var(--k-rose); font-style: italic; }
+.page-subtitle {
+  font-size: 13px;
+  color: var(--k-muted);
+  margin-top: 6px;
+  font-weight: 400;
+}
+.badge-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.badge {
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--radius-4xl);
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+.badge-rose   { background: var(--k-rose-pale); color: var(--k-rose); }
+.badge-gold   { background: var(--k-gold-pale); color: var(--k-gold); }
+.badge-muted  { background: #F0ECE8; color: var(--k-muted); }
+
+/* ── Content ── */
+.content {
+  padding: 32px 40px 48px;
+  flex: 1;
+}
+
+/* ── Panels ── */
+.panel { display: none; animation: fadeIn .2s ease; }
+.panel.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--k-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--k-border);
+  overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
+}
+.card:hover {
+  box-shadow: 0 8px 24px rgba(44,28,24,0.08);
+  transform: translateY(-2px);
+}
+.card-full { grid-column: 1 / -1; }
+
+.card-header {
+  padding: 14px 18px 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--k-border);
+  background: var(--k-ivory);
+  transition: background .15s;
+}
+.card-header:hover { background: #F5EEE8; }
+.card-icon { font-size: 17px; }
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+  color: var(--k-text);
+  letter-spacing: -0.2px;
+}
+.card-chevron {
+  color: var(--k-muted);
+  font-size: 11px;
+  transition: transform .25s;
+}
+.card.collapsed .card-chevron { transform: rotate(-90deg); }
+.card.collapsed .card-body { display: none; }
+
+.card-body { padding: 14px 18px 16px; }
+
+/* ── Tree ── */
+.tree { list-style: none; }
+.tree > li {
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--k-border);
+  margin-left: 4px;
+  font-size: 13px;
+  color: var(--k-muted);
+  line-height: 1.6;
+  position: relative;
+}
+.tree > li::before {
+  content: '';
+  position: absolute;
+  left: -1px; top: 50%;
+  width: 10px; height: 2px;
+  background: var(--k-border);
+}
+.tree > li strong {
+  color: var(--k-text);
+  font-weight: 600;
+  font-size: 13px;
+}
+.sub {
+  margin-top: 4px;
+  list-style: none;
+}
+.sub li {
+  padding: 3px 0 3px 12px;
+  border-left: 2px solid #EDE5DF80;
+  margin-left: 4px;
+  font-size: 12.5px;
+  color: var(--k-muted);
+  position: relative;
+}
+.sub li::before {
+  content: '';
+  position: absolute;
+  left: -1px; top: 50%;
+  width: 8px; height: 2px;
+  background: #EDE5DF80;
+}
+
+/* ── Tags ── */
+.tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: var(--radius-4xl);
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.tag-female { background: var(--k-rose-pale); color: var(--k-rose); }
+.tag-male   { background: #EDE9FE; color: #5B21B6; }
+.tag-vip    { background: var(--k-gold-pale); color: var(--k-gold); }
+.tag-web3   { background: #ECFDF5; color: #065F46; }
+
+/* ── Chip ── */
+.chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 5px 14px;
+  border-radius: var(--radius-4xl);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.chip-rose   { background: var(--k-rose-pale); color: var(--k-rose); border-color: var(--k-blush); }
+.chip-gold   { background: var(--k-gold-pale); color: var(--k-gold); border-color: #DCC49A; }
+.chip-muted  { background: #F0ECE8; color: var(--k-muted); border-color: var(--k-border); }
+
+/* ── Item Row ── */
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  background: var(--k-ivory);
+  margin-bottom: 8px;
+  border: 1px solid var(--k-border);
+}
+.item-row:last-child { margin-bottom: 0; }
+.item-emoji { font-size: 20px; flex-shrink: 0; }
+.item-name  { font-weight: 600; font-size: 13px; color: var(--k-text); }
+.item-desc  { font-size: 12px; color: var(--k-muted); margin-top: 1px; }
+
+/* ── Diff Table ── */
+.diff-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.diff-table th {
+  padding: 10px 16px;
+  background: var(--k-ivory);
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--k-muted);
+  border-bottom: 2px solid var(--k-border);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.diff-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--k-border);
+  vertical-align: top;
+  color: var(--k-muted);
+  font-size: 13px;
+}
+.diff-table tr:last-child td { border-bottom: none; }
+.diff-table td:first-child { color: var(--k-text); font-weight: 500; }
+.diff-new { color: #059669; font-weight: 600; }
+
+/* ── Section Label ── */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--k-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--k-border);
+}
+
+/* ── Divider ── */
+.divider {
+  height: 1px;
+  background: var(--k-border);
+  margin: 12px 0;
+}
+
+/* ── Footer ── */
+footer {
+  padding: 20px 40px;
+  border-top: 1px solid var(--k-border);
+  background: var(--k-surface);
+  font-size: 11.5px;
+  color: var(--k-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+footer span { font-weight: 500; color: var(--k-rose); }
+
+/* ── Progress Bar ── */
+.progress-track {
+  height: 8px;
+  background: var(--k-border);
+  border-radius: var(--radius-4xl);
+  overflow: hidden;
+  margin-top: 6px;
+  width: 100%;
+  max-width: 100%;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-4xl);
+  transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+.progress-fill.rose  { background: linear-gradient(90deg, var(--k-rose), var(--k-blush)); }
+.progress-fill.gold  { background: linear-gradient(90deg, var(--k-gold), #DFC49A); }
+.progress-fill.green { background: linear-gradient(90deg, #059669, #34D399); }
+
+/* ── Timeline ── */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+
+.tl-item {
+  display: grid;
+  grid-template-columns: 48px 2px 1fr;
+  gap: 0 16px;
+  position: relative;
+}
+.tl-week {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--k-muted);
+  text-align: right;
+  padding-top: 18px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.tl-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.tl-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--k-surface);
+  flex-shrink: 0;
+  margin-top: 20px;
+  z-index: 1;
+}
+.tl-dot.rose  { background: var(--k-rose); box-shadow: 0 0 0 3px var(--k-rose-pale); }
+.tl-dot.gold  { background: var(--k-gold); box-shadow: 0 0 0 3px var(--k-gold-pale); }
+.tl-dot.green { background: #059669;       box-shadow: 0 0 0 3px #D1FAE5; }
+.tl-line {
+  flex: 1;
+  width: 2px;
+  background: var(--k-border);
+  min-height: 24px;
+}
+.tl-item:last-child .tl-line { background: transparent; }
+
+.tl-card {
+  background: var(--k-surface);
+  border: 1px solid var(--k-border);
+  border-radius: var(--radius-xl);
+  padding: 16px 18px 18px;
+  margin-bottom: 16px;
+  transition: box-shadow .2s, transform .2s;
+}
+.tl-card:hover {
+  box-shadow: 0 6px 20px rgba(44,28,24,0.07);
+  transform: translateY(-2px);
+}
+.tl-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tl-card-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--k-text);
+  letter-spacing: -0.2px;
+}
+.tl-card-weeks {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--k-muted);
+  background: var(--k-ivory);
+  border: 1px solid var(--k-border);
+  padding: 2px 10px;
+  border-radius: var(--radius-4xl);
+}
+
+.tl-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+  min-width: 0;
+}
+.tl-metrics > div {
+  min-width: 0;
+  overflow: hidden;
+}
+.tl-metric-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--k-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tl-metric-label span { font-size: 13px; font-weight: 700; letter-spacing: 0; text-transform: none; }
+
+.tl-tasks { margin-top: 12px; }
+.tl-task {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--k-border);
+  font-size: 12.5px;
+  color: var(--k-muted);
+}
+.tl-task:last-child { border-bottom: none; }
+.tl-task-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Summary Row ── */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.summary-card {
+  background: var(--k-surface);
+  border: 1px solid var(--k-border);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  text-align: center;
+}
+.summary-num {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.summary-num.rose  { color: var(--k-rose); }
+.summary-num.gold  { color: var(--k-gold); }
+.summary-num.green { color: #059669; }
+.summary-desc {
+  font-size: 11.5px;
+  color: var(--k-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--k-border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-name">戀戀 Koibito</div>
+    <div class="sidebar-brand-sub">Architecture v2.0</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <button class="nav-item active" onclick="switchTab('front', this)">
+      <span class="nav-icon">🌸</span> 前台系統
+    </button>
+    <button class="nav-item" onclick="switchTab('back', this)">
+      <span class="nav-icon">⚙️</span> 後台管理系統
+    </button>
+    <button class="nav-item" onclick="switchTab('meta', this)">
+      <span class="nav-icon">📊</span> 角色 &amp; 道具
+    </button>
+    <button class="nav-item" onclick="switchTab('schedule', this)">
+      <span class="nav-icon">📅</span> 開發進度 &amp; 支付
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-version">v2.0 ・ 2026-03-26</div>
+  </div>
+</aside>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-top">
+      <div>
+        <h1 class="page-title">產品架構 <span>Architecture</span></h1>
+        <p class="page-subtitle">來源：前台.pdf + 後台.pdf + architecture-v2.md ・ 整理日期 2026-03-26</p>
+      </div>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-rose">前台系統</span>
+      <span class="badge badge-muted">後台管理系統</span>
+      <span class="badge badge-gold">VIP 方案</span>
+      <span class="badge badge-muted">Web3 支付</span>
+      <span class="badge badge-muted">虛擬道具</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- ═══ 前台 ═══ -->
+    <div id="panel-front" class="panel active">
+      <div class="section-label">前台系統 — 12 個模組</div>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🔑</span>
+            <span class="card-title">登入 / 註冊</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>登入</strong>
+                <ul class="sub">
+                  <li>Email + 密碼</li>
+                  <li>手機 OTP</li>
+                  <li>Gmail OAuth</li>
+                </ul>
+              </li>
+              <li><strong>註冊表單</strong>
+                <ul class="sub">
+                  <li>性別、暱稱</li>
+                  <li>Email</li>
+                  <li>手機號碼 + 驗證碼</li>
+                  <li>生日</li>
+                  <li>Gmail OAuth</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🏠</span>
+            <span class="card-title">首頁</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>定位</strong>
+                <ul class="sub">
+                  <li>抓取瀏覽器 / 裝置 GPS</li>
+                  <li>手動選擇地域</li>
+                  <li>關鍵字搜尋地名</li>
+                  <li>歷史搜尋紀錄</li>
+                </ul>
+              </li>
+              <li><strong>搜尋</strong>（獨立功能）</li>
+              <li><strong>輪播 Banner</strong>
+                <ul class="sub">
+                  <li>可設定站內連結</li>
+                  <li>後台控制起訖時間</li>
+                </ul>
+              </li>
+              <li><strong>推薦配對 Tabs（4個）</strong>
+                <ul class="sub">
+                  <li>全部</li>
+                  <li>新人</li>
+                  <li>鄰近（基於定位）</li>
+                  <li>最愛</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">📰</span>
+            <span class="card-title">動態牆（Feed）</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>發布動態</strong>
+                <ul class="sub">
+                  <li>文字</li>
+                  <li>圖片（單 / 多張）</li>
+                  <li>Hashtag 標籤</li>
+                </ul>
+              </li>
+              <li><strong>互動</strong>
+                <ul class="sub">
+                  <li>按讚</li>
+                  <li>留言</li>
+                  <li>收藏</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">⚡</span>
+            <span class="card-title">閃電罐頭</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>付款入口（信用卡 / 超商 / Web3）</li>
+              <li>女性用戶：每日免費一次 <span class="tag tag-female">女</span></li>
+              <li>男性用戶：購買後使用 <span class="tag tag-male">男</span></li>
+              <li>特殊角色：每日自動發送</li>
+              <li>設定目標篩選條件</li>
+              <li>自訂打招呼文字</li>
+              <li>倒數計時顯示</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🔒</span>
+            <span class="card-title">私密相簿</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>上傳相片 <span class="tag tag-female">女</span></li>
+              <li>上傳影片 <span class="tag tag-female">女</span></li>
+              <li>男性需甜甜圈解鎖 🍩</li>
+              <li>開啟有時效限制</li>
+              <li>連結解鎖（分享連結）</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">💬</span>
+            <span class="card-title">聊天</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>聊天列表</strong>
+                <ul class="sub">
+                  <li>依最新訊息排序</li>
+                  <li>顯示線上 / 下線狀態</li>
+                </ul>
+              </li>
+              <li><strong>1 對 1 聊天室</strong> <span class="tag tag-vip">VIP</span>
+                <ul class="sub">
+                  <li>文字訊息</li>
+                  <li>圖片傳送</li>
+                  <li>表情符號</li>
+                  <li>送禮（玫瑰 / 甜甜圈 / 車票）</li>
+                  <li>留言截圖功能</li>
+                  <li>舉報功能</li>
+                  <li>封鎖功能</li>
+                  <li>刪除聊天</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">👤</span>
+            <span class="card-title">個人檔案（自己）</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>基本資料</strong>
+                <ul class="sub">
+                  <li>大頭照、暱稱、性別、生日</li>
+                  <li>身高、體重、體型</li>
+                  <li>學歷、職業</li>
+                  <li>語言、婚姻狀態</li>
+                  <li>吸菸 / 飲酒、約會預算</li>
+                  <li>自我介紹（Bio）</li>
+                </ul>
+              </li>
+              <li>手動選擇地區</li>
+              <li><strong>個人帳戶</strong>
+                <ul class="sub">
+                  <li>關注清單（你收藏誰）</li>
+                  <li>粉絲列表（誰收藏你）</li>
+                  <li>誰看過你</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🧑‍🤝‍🧑</span>
+            <span class="card-title">其他使用者頁面</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>大頭照（初步查看相片）</li>
+              <li>個人簡介</li>
+              <li>性別 / 生日</li>
+              <li>動態牆</li>
+              <li>關注（按鈕）</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🎁</span>
+            <span class="card-title">禮物 &amp; 錢包</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>我的禮物</strong>
+                <ul class="sub">
+                  <li>收到的禮物（對象 / 時間 / 金額）</li>
+                  <li>送出的禮物（對象 / 時間 / 金額）</li>
+                </ul>
+              </li>
+              <li><strong>我的錢包</strong>
+                <ul class="sub">
+                  <li>帳戶餘額</li>
+                  <li>購買禮物入口</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">👑</span>
+            <span class="card-title">升級 VIP 方案</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="chip-grid" style="margin-bottom:12px">
+              <span class="chip chip-gold">月繳</span>
+              <span class="chip chip-gold">季繳</span>
+              <span class="chip chip-gold">年繳</span>
+            </div>
+            <ul class="tree">
+              <li>男性購買會籍可開啟聊天 <span class="tag tag-vip">VIP</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🔐</span>
+            <span class="card-title">帳號安全 &amp; 設定</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>綁定 / 更換手機號碼</li>
+              <li>Gmail 綁定 / 更換 Email</li>
+              <li>推薦碼 &amp; 專屬邀請連結</li>
+              <li>用戶協議 / 隱私政策</li>
+              <li>刪除帳號</li>
+              <li>登出帳號</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">✨</span>
+            <span class="card-title">其他功能</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>累積簽到（每日彈窗提示）</li>
+              <li>實名認證（3–5 秒短影音）</li>
+              <li>置頂通知（公告 / 站內消息）</li>
+              <li>意見回饋（主旨 + 內文）</li>
+              <li>聯繫客服（LINE 官方帳號）</li>
+              <li>關於我們（靜態頁）</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ 後台 ═══ -->
+    <div id="panel-back" class="panel">
+      <div class="section-label">後台管理系統 — 14 個模組</div>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">📊</span>
+            <span class="card-title">儀表板</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>會員成長數據（趨勢圖）</li>
+              <li>交易金額數據（趨勢圖）</li>
+              <li>會員性別比例（圓餅圖）</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🧾</span>
+            <span class="card-title">訂單列表（獨立模組）</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>禮物消費紀錄</li>
+              <li>儲值紀錄</li>
+              <li>會員 Email</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">👥</span>
+            <span class="card-title">會員管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>會員列表</strong>
+                <ul class="sub">
+                  <li>搜尋（暱稱 / 手機 / Email）</li>
+                  <li>篩選（性別 / 等級 / 入金時間）</li>
+                  <li>會員詳情</li>
+                </ul>
+              </li>
+              <li><strong>操作</strong>
+                <ul class="sub">
+                  <li>編輯 / 刪除</li>
+                  <li>停用（登出且無法登入）</li>
+                  <li>刪除帳號</li>
+                </ul>
+              </li>
+              <li><strong>會員交易明細</strong>
+                <ul class="sub">
+                  <li>禮物消費紀錄</li>
+                  <li>儲值明細</li>
+                  <li>手動加值（記錄操作者）</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">✅</span>
+            <span class="card-title">實名認證管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>認證要求列表</li>
+              <li>審核內容（3–5 秒短影音 + 個人資料）</li>
+              <li>審核通過（一鍵）</li>
+              <li>審核不通過（填寫原因）</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">💰</span>
+            <span class="card-title">入金（儲值）管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>會員儲值明細（時間 / 金額 / 類型）</li>
+              <li>手動加值（紀錄操作者）</li>
+              <li>法幣管理</li>
+              <li>匯率管理（法幣 / 虛擬貨幣）</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">💸</span>
+            <span class="card-title">出金（提現）管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>出金要求列表</li>
+              <li>審核通過（標記已完成）</li>
+              <li>審核不通過（填寫原因）</li>
+              <li>⚠ 男性用戶無出金功能 <span class="tag tag-male">男</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🏅</span>
+            <span class="card-title">會員等級管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>等級列表</strong>
+                <ul class="sub">
+                  <li>入金門檻條件設定</li>
+                  <li>已推薦人數</li>
+                  <li>各等級反傭比例</li>
+                </ul>
+              </li>
+              <li><strong>特殊合作等級</strong>
+                <ul class="sub">
+                  <li>指定對象授予特殊權益</li>
+                  <li>每日自動閃電罐頭</li>
+                  <li>高於一般反傭比例</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🎠</span>
+            <span class="card-title">輪播圖管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>輪播列表（標題 / 圖片 / 連結 / 起訖日）</li>
+              <li>新增 / 編輯 / 刪除</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🎀</span>
+            <span class="card-title">禮物管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>禮物列表</strong>
+                <ul class="sub">
+                  <li>名稱、圖片</li>
+                  <li>購買金額 / 上限</li>
+                  <li>出金面額</li>
+                  <li>時效</li>
+                </ul>
+              </li>
+              <li>禮物賦能設定（金額 / 時效 / 名稱 / 圖片 / 出金面額）</li>
+              <li><strong>每日簽到獎勵設定</strong>
+                <ul class="sub">
+                  <li>設定每日簽到禮物</li>
+                  <li>累積制（不需連續簽到）</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">📢</span>
+            <span class="card-title">平台公告管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>公告列表（發布日 / 下架日 / 標題）</li>
+              <li>新增（圖文編輯器 + 條件篩選性別）</li>
+              <li>編輯 / 刪除</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🚩</span>
+            <span class="card-title">回饋單 / 舉報管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li><strong>回饋列表</strong>
+                <ul class="sub">
+                  <li>回饋詳情</li>
+                  <li>回覆信件</li>
+                </ul>
+              </li>
+              <li><strong>舉報列表</strong>
+                <ul class="sub">
+                  <li>舉報詳情</li>
+                  <li>拒絕（填原因）</li>
+                  <li>重新提交（用戶可修正後重送）</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🎫</span>
+            <span class="card-title">車票審核管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>Pending 3 天後無問題自動送出</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">👑</span>
+            <span class="card-title">付費方案管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>方案列表</li>
+              <li>方案詳情（費用可設 0 元 / 效期）</li>
+              <li>新增 / 編輯 / 刪除</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🛡️</span>
+            <span class="card-title">後台管理員管理</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <ul class="tree">
+              <li>管理者列表（新增 / 編輯 / 刪除）</li>
+              <li>新增假帳號（測試 / 營銷用）</li>
+              <li><strong>角色管理</strong>
+                <ul class="sub">
+                  <li>最高管理員（全權限）</li>
+                  <li>會計（財務功能）</li>
+                  <li>審核人員（認證 / 車票）</li>
+                  <li>管理人員（公告 / 輪播）</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ 角色 & 道具 ═══ -->
+    <div id="panel-meta" class="panel">
+      <div class="section-label">用戶角色 / 虛擬道具 / 付款方式</div>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🧑</span>
+            <span class="card-title">用戶角色</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="item-row">
+              <span class="item-emoji">👨</span>
+              <div>
+                <div class="item-name">一般男性用戶（未付費）</div>
+                <div class="item-desc">可瀏覽、篩選，不能主動聊天</div>
+              </div>
+            </div>
+            <div class="item-row">
+              <span class="item-emoji">👑</span>
+              <div>
+                <div class="item-name">VIP 男性用戶（付費）</div>
+                <div class="item-desc">解鎖聊天 + 特殊配對</div>
+              </div>
+            </div>
+            <div class="item-row">
+              <span class="item-emoji">👩</span>
+              <div>
+                <div class="item-name">女性用戶</div>
+                <div class="item-desc">免費大部分功能 + 每日一次免費閃電罐頭</div>
+              </div>
+            </div>
+            <div class="item-row">
+              <span class="item-emoji">⭐</span>
+              <div>
+                <div class="item-name">特殊角色</div>
+                <div class="item-desc">後台授予，特殊反傭比例 + 每日自動閃電罐頭</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">🎮</span>
+            <span class="card-title">虛擬道具</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="item-row">
+              <span class="item-emoji">🌹</span>
+              <div>
+                <div class="item-name">玫瑰花</div>
+                <div class="item-desc">基礎禮物（男送女）</div>
+              </div>
+            </div>
+            <div class="item-row">
+              <span class="item-emoji">🍩</span>
+              <div>
+                <div class="item-name">甜甜圈</div>
+                <div class="item-desc">開啟私密相簿專用</div>
+              </div>
+            </div>
+            <div class="item-row">
+              <span class="item-emoji">⚡</span>
+              <div>
+                <div class="item-name">車票</div>
+                <div class="item-desc">特殊禮物，有時效性</div>
+              </div>
+            </div>
+            <div class="item-row">
+              <span class="item-emoji">🔋</span>
+              <div>
+                <div class="item-name">閃電罐頭</div>
+                <div class="item-desc">批量破冰功能道具（非禮物）</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <span class="card-icon">💳</span>
+            <span class="card-title">付款方式</span>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="item-row">
+              <span class="item-emoji">💳</span>
+              <div>
+                <div class="item-name">信用卡</div>
+                <div class="item-desc">綠界 ECPay</div>
+              </div>
+            </div>
+            <div class="item-row">
+              <span class="item-emoji">🏪</span>
+              <div>
+                <div class="item-name">超商代碼</div>
+                <div class="item-desc">綠界 ECPay（全家 / 7-11 / 萊爾富）</div>
+              </div>
+            </div>
+            <div class="item-row">
+              <span class="item-emoji">🦊</span>
+              <div>
+                <div class="item-name">Web3 錢包 <span class="tag tag-web3">BSC USDT</span></div>
+                <div class="item-desc">支援 MetaMask 等</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ 開發進度 & 支付 ═══ -->
+    <div id="panel-schedule" class="panel">
+      <div class="section-label">開發進度 &amp; 支付時程</div>
+
+      <!-- Summary -->
+      <div class="summary-row">
+        <div class="summary-card">
+          <div class="summary-num rose">7 週</div>
+          <div class="summary-desc">總開發時程</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num green">100%</div>
+          <div class="summary-desc">最終完成目標</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num gold">100%</div>
+          <div class="summary-desc">總費用（3 期付清）</div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline">
+
+        <!-- Week 1 -->
+        <div class="tl-item">
+          <div class="tl-week">W1</div>
+          <div class="tl-spine">
+            <div class="tl-dot rose"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-header">
+              <span class="tl-card-title">系統與模板確認</span>
+              <span class="tl-card-weeks">第 1 週</span>
+            </div>
+            <div class="tl-tasks">
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-rose)"></span>技術選型確認（前後端框架）</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-rose)"></span>UI 模板確認 &amp; Design Token 建立</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-rose)"></span>資料庫 Schema 初稿</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-rose)"></span>開發環境建置 &amp; CI/CD 設定</div>
+            </div>
+            <div class="tl-metrics">
+              <div>
+                <div class="tl-metric-label">完成進度 <span class="rose" style="color:var(--k-rose)">20%</span></div>
+                <div class="progress-track"><div class="progress-fill rose" style="width:20%"></div></div>
+              </div>
+              <div>
+                <div class="tl-metric-label">支付費用 <span style="color:var(--k-gold)">30%</span></div>
+                <div class="progress-track"><div class="progress-fill gold" style="width:30%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 2-3 -->
+        <div class="tl-item">
+          <div class="tl-week">W2–3</div>
+          <div class="tl-spine">
+            <div class="tl-dot gold"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-header">
+              <span class="tl-card-title">系統架設與設計</span>
+              <span class="tl-card-weeks">第 2 ～ 3 週</span>
+            </div>
+            <div class="tl-tasks">
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>前台核心頁面開發（首頁 / 聊天 / 配對）</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>後台管理系統架設</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>API 串接（ECPay / Web3 / OTP）</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>VIP 會員機制 &amp; 道具系統</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:var(--k-gold)"></span>私密相簿 / 閃電罐頭 / 禮物模組</div>
+            </div>
+            <div class="tl-metrics">
+              <div>
+                <div class="tl-metric-label">完成進度 <span style="color:var(--k-gold)">70%</span></div>
+                <div class="progress-track"><div class="progress-fill gold" style="width:70%"></div></div>
+              </div>
+              <div>
+                <div class="tl-metric-label">支付費用 <span style="color:var(--k-gold)">40%</span></div>
+                <div class="progress-track"><div class="progress-fill gold" style="width:40%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 4-5 -->
+        <div class="tl-item">
+          <div class="tl-week">W4–7</div>
+          <div class="tl-spine">
+            <div class="tl-dot green"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-header">
+              <span class="tl-card-title">測試與上線準備</span>
+              <span class="tl-card-weeks">第 4 ～ 7 週</span>
+            </div>
+            <div class="tl-tasks">
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>全功能整合測試（前台 + 後台）</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>跨裝置 / 跨瀏覽器 UI 驗收</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>效能調校 &amp; 安全性審查</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>正式環境部署 &amp; DNS 設定</div>
+              <div class="tl-task"><span class="tl-task-dot" style="background:#059669"></span>上線後 Bug Fix 緩衝期</div>
+            </div>
+            <div class="tl-metrics">
+              <div>
+                <div class="tl-metric-label">完成進度 <span style="color:#059669">90–100%</span></div>
+                <div class="progress-track"><div class="progress-fill green" style="width:100%"></div></div>
+              </div>
+              <div>
+                <div class="tl-metric-label">支付費用 <span style="color:#059669">30%</span></div>
+                <div class="progress-track"><div class="progress-fill green" style="width:30%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /timeline -->
+
+      <!-- 費用總覽 -->
+      <div class="card card-full" style="margin-top:8px;">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-icon">💰</span>
+          <span class="card-title">費用支付總覽</span>
+          <span class="card-chevron">▾</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <table class="diff-table">
+            <thead>
+              <tr>
+                <th>期數</th>
+                <th>時程</th>
+                <th>里程碑</th>
+                <th style="text-align:right">費用比例</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-rose" style="height:auto;padding:2px 10px">第 1 期</span></td>
+                <td>第 1 週</td>
+                <td>系統與模板確認完成（20%）</td>
+                <td style="text-align:right;font-weight:700;color:var(--k-rose)">30%</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-gold" style="height:auto;padding:2px 10px">第 2 期</span></td>
+                <td>第 2–3 週</td>
+                <td>系統架設與設計完成（70%）</td>
+                <td style="text-align:right;font-weight:700;color:var(--k-gold)">40%</td>
+              </tr>
+              <tr>
+                <td><span class="badge" style="height:auto;padding:2px 10px;background:#D1FAE5;color:#059669">第 3 期</span></td>
+                <td>第 4–7 週</td>
+                <td>測試驗收 &amp; 正式上線（100%）</td>
+                <td style="text-align:right;font-weight:700;color:#059669">30%</td>
+              </tr>
+              <tr style="background:var(--k-ivory)">
+                <td colspan="3" style="font-weight:700;color:var(--k-text)">合計</td>
+                <td style="text-align:right;font-weight:700;color:var(--k-text)">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /panel-schedule -->
+
+  </div><!-- /content -->
+
+  <footer>
+    <span>Koibito</span> Architecture v2.0 ・ 2026-03-26 ・ 來源：前台.pdf + 後台.pdf + architecture-v2.md
+    <span style="color:var(--k-muted); font-weight:400">Design System v1.0.4</span>
+  </footer>
+
+</div><!-- /main -->
+
+<script>
+  function switchTab(panel, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + panel).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function toggleCard(header) {
+    header.parentElement.classList.toggle('collapsed');
+  }
+</script>
+</body>
+</html>
