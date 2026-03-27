@@ -578,9 +578,6 @@ footer span { font-weight: 500; color: var(--k-rose); }
     <button class="nav-item" onclick="switchTab('meta', this)">
       <span class="nav-icon">📊</span> 角色 &amp; 道具
     </button>
-    <button class="nav-item" onclick="switchTab('diff', this)">
-      <span class="nav-icon">🔄</span> v1 → v2 差異
-    </button>
     <button class="nav-item" onclick="switchTab('schedule', this)">
       <span class="nav-icon">📅</span> 開發進度 &amp; 支付
     </button>
@@ -1290,38 +1287,6 @@ footer span { font-weight: 500; color: var(--k-rose); }
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <!-- ═══ 差異 ═══ -->
-    <div id="panel-diff" class="panel">
-      <div class="section-label">v1 → v2 差異對照</div>
-      <div class="card card-full" style="max-width:900px">
-        <div class="card-header" onclick="toggleCard(this)">
-          <span class="card-icon">🔄</span>
-          <span class="card-title">v1（PRD 文字版）vs v2（加入視覺心智圖）</span>
-          <span class="card-chevron">▾</span>
-        </div>
-        <div class="card-body" style="padding:0">
-          <table class="diff-table">
-            <thead>
-              <tr>
-                <th>差異點</th>
-                <th>v1</th>
-                <th>v2 新增 / 修正</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>首頁 Tabs</td><td>推薦 / 附近 / 最愛（3個）</td><td class="diff-new">全部 / 新人 / 鄰近 / 最愛（4個）</td></tr>
-              <tr><td>搜尋功能</td><td>歸在定位下</td><td class="diff-new">獨立搜尋功能</td></tr>
-              <tr><td>聊天室功能</td><td>文字 / 圖片 / 表情 / 送禮</td><td class="diff-new">+ 截圖、舉報、封鎖、刪除聊天</td></tr>
-              <tr><td>他人個人頁面</td><td>沒有獨立區塊</td><td class="diff-new">獨立模組（查看他人）</td></tr>
-              <tr><td>後台訂單列表</td><td>在會員管理下</td><td class="diff-new">獨立模組</td></tr>
-              <tr><td>會員等級條件</td><td>入金累積</td><td class="diff-new">入金門檻 + 已推薦人數</td></tr>
-              <tr><td>禮物賦能設定</td><td>只有金額 / 時效</td><td class="diff-new">+ 名稱 / 圖片 / 出金面額</td></tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
 
